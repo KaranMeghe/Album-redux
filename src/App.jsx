@@ -1,6 +1,8 @@
-import { UsersList } from "./Components";
+import { UsersList } from "./Components/index";
+
 
 function App() {
+
   return (
     <>
       <div className="container mx-auto">
