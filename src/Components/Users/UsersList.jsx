@@ -1,28 +1,31 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchUsers, addUser } from '../../Redux/store';
 import { Button, Skelleton } from '../index';
+import useThunk from '../../hooks/useThunk';
 
 const UsersList = () => {
+
+
+
+    const [isUserLoading, loadingUsersError, doFetchUsers] = useThunk(fetchUsers);
+
+    const [isCreatingUser, creatingUserError, handleAddUser] = useThunk(addUser);
+
     const dispatch = useDispatch();
-    const { isLoading, data, error } = useSelector((state) => state.users);
-    const times = isLoading ? data.length : 0;
+    const { data } = useSelector((state) => state.users);
+    const times = isUserLoading ? data.length : 0;
 
     useEffect(() => {
-        dispatch(fetchUsers());
+        doFetchUsers();
     }, [dispatch]);
 
-    if (isLoading) {
+    if (isUserLoading) {
         return <Skelleton times={times === 0 ? 5 : times} />;
     }
-    if (error) {
+    if (loadingUsersError) {
         return <div>Error</div>;
     }
-
-    const handleAddUser = () => {
-        dispatch(addUser());
-    };
-
 
     const rendereUsers = data.map((user) => {
         return <div key={user.id} className="my-2 border rounded">
@@ -35,7 +38,7 @@ const UsersList = () => {
     return <div>
         <div className='flex flex-row justify-between m-3'>
             <h1 className='m-2 text-xl'>Users</h1>
-            <Button onClick={handleAddUser}>+ Add Users</Button>
+            {isCreatingUser ? <p>Creating User</p> : <Button onClick={handleAddUser}>+ Add Users</Button>}
         </div>
         {rendereUsers}
     </div>;
