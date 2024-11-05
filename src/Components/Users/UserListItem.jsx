@@ -14,11 +14,11 @@ const UserListItem = ({ user }) => {
     return (
         <div className="my-2 border rounded">
             <div className="flex p-2 justify-between items-center cursor-pointer">
-                <Button onClick={handleClick}>
+                <div className="flex gap-2 items-center"> <Button onClick={handleClick}>
                     <GoTrash />
                 </Button>
-                {removeUserError && <div>Error Deleting Users</div>}
-                {user.name}
+                    {removeUserError && <div>Error Deleting Users</div>}
+                    {user.name}</div>
             </div>
         </div>
     );
